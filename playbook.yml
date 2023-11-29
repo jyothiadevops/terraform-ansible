@@ -1,6 +1,6 @@
 ---
 - name: this playbook install pacakges
-  hosts: webservers 
+  hosts: all
   become: true
   tasks:
   - name: install package
