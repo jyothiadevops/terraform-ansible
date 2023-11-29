@@ -20,11 +20,11 @@ resource "aws_instance" "r100c96" {
     command = "sleep 150"
   }
 
-  provisioner "local-exec" {
-    command = "ansible all -m shell -a 'yum -y install httpd; systemctl restart httpd'"
-  }
+  //provisioner "local-exec" {
+    //command = "ansible all -m shell -a 'yum -y install httpd; systemctl restart httpd'"
+  //}
 
-}
+//}
 
 output "ip" {
   value = aws_instance.r100c96.public_ip
