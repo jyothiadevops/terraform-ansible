@@ -11,14 +11,14 @@ resource "aws_instance" "r100c96" {
   }
 
 
-  provisioner "local-exec" {
+    / * provisioner "local-exec" {
     command = "echo ${aws_instance.r100c96.public_ip} > inventory"
-  }
+  } */
 
 
-  provisioner "local-exec" {
+  /* provisioner "local-exec" {
     command = "sleep 150"
-  }
+  } */
 
   //provisioner "local-exec" {
     //command = "ansible all -m shell -a 'yum -y install httpd; systemctl restart httpd'"
