@@ -5,7 +5,7 @@ resource "aws_instance" "r100c96" {
   instance_type     = "t2.micro"
   key_name          = "jenkins"
   associate_public_ip_address = true
-  user_data         = file("userdata.sh")
+  //user_data         = file("userdata.sh")
   tags = {
     Name = "Terraform-diff-linux"
   }
