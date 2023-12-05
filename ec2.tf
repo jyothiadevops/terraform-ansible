@@ -5,7 +5,7 @@ resource "aws_instance" "r100c96" {
   instance_type     = "t2.micro"
   key_name          = "jenkins"
   associate_public_ip_address = true
-  //user_data         = file("userdata.sh")
+  user_data         = file("userdata.sh")
   tags = {
     Name = "Terraform-diff-linux"
   }
@@ -16,13 +16,13 @@ resource "aws_instance" "r100c96" {
   } 
 
 
-  /* provisioner "local-exec" {
+  provisioner "local-exec" {
     command = "sleep 150"
-  } */
+  } 
 
-  //provisioner "local-exec" {
-    //command = "ansible all -m shell -a 'yum -y install httpd; systemctl restart httpd'"
-  //}
+  provisioner "local-exec" {
+    command = "ansible all -m shell -a 'yum -y install httpd; systemctl restart httpd'"
+  }
 
 }
 
