@@ -1,0 +1,82 @@
+pipeline {
+  agent any
+
+  stages {
+    stage('Init TF') {
+      steps {
+          
+          git branch: 'main', url: 'https://github.com/jyothiadevops/terraform-ansible.git'
+          sh 'cat ec2.tf'
+          sh 'terraform init'
+      }
+    }
+
+    stage('Plan TF') {
+      steps {
+        sh '''
+          terraform plan
+        '''
+      }
+    }
+
+    stage('Validate TF') {
+      input {
+        message "Do you want to apply this Plan?"
+        ok "Apply Plan"
+      }
+      steps {
+        echo 'Plan Accepted'
+      }
+    }
+
+    stage('Apply TF') {
+      steps {
+        sh '''
+          terraform apply -auto-approve
+        '''
+      }
+    }
+
+    stage('Wait EC2') {
+      steps {
+        sh '''
+          aws ec2 wait instance-status-ok --region us-east-1 --instance-ids `$(terraform output -json aws_instance.r100c96.public_ip) | awk -F'"' '{print $2}'`
+        '''
+      }
+    }
+
+    stage('Validate Ansible') {
+      input {
+        message "Do you want to run Ansible Playbook?"
+        ok "Run Ansible"
+      }
+      steps {
+        echo "Ansible Accepted"
+      }
+    }
+
+    stage('Run Ansible') {
+      steps {
+        ansiblePlaybook credentialsId: 'ansiblekey', disableHostKeyChecking: true, inventory: 'inventory', playbook: 'playbook.yml', vaultTmpPath: ''
+      }
+    }
+
+    stage('Validate Destroy') {
+      input {
+        message "Do you want to destroy Terraform Infra?"
+        ok "Destroy"
+      }
+      steps {
+        echo "Destroy Accepted"
+      }
+    }
+
+    stage('Destroy TF') {
+      steps {
+        sh '''
+          terraform destroy -auto-approve
+        '''
+      }
+    }
+  }
+}
