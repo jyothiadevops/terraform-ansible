@@ -21,7 +21,8 @@ resource "aws_instance" "r100c96" {
   } 
 
   provisioner "local-exec" {
-    command = "ansible all -m shell -a 'yum -y install httpd; systemctl restart httpd'"
+    //command = "ansible all -m shell -a 'yum -y install httpd; systemctl restart httpd'"
+      command = "ansible-playbook -u ansadmin -i inventory playbook.yml"
   }
 
 }
