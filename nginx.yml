@@ -1,9 +1,17 @@
 ---
-- hosts: all
+- name: Install Nginx on Amazon Linux
+  hosts: all
+  become: true
+
   tasks:
-    - name: install nginx
-      apt: name=nginx state=latest
-    - name: start nginx
+    - name: Install Nginx package
+      package:
+        name: nginx
+        state: present
+
+    - name: Start Nginx service
       service:
-          name: nginx
-          state: started
+        name: nginx
+        state: started
+        enabled: yes
+
